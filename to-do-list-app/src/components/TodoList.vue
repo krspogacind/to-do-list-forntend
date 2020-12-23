@@ -1,22 +1,29 @@
 <template>
-    <TodoListItem 
-      v-for="todo in todoList"
-      :key="todo.id"
-      :todo="todo"/>
+    <button class="btn btn-primary ml-5 mb-3" @click="showModal = true">Add to-do item</button>
+    <TodoListItemForm @add-item="addItem" v-if="showModal" @close="showModal = false"/>
+    <div class="card-deck">
+        <TodoListItem 
+          v-for="todo in todoList"
+          :key="todo.id"
+          :todo="todo"/>
+    </div>
 </template>
 
 <script> 
 import axios from 'axios';
 import TodoListItem from './TodoListItem.vue';
+import TodoListItemForm from './TodoListItemForm.vue';
 
 export default {
   name: 'TodoList',
   components: {
-    TodoListItem
+    TodoListItem,
+    TodoListItemForm
   },
   data() {
     return {
-      todoList: []
+      todoList: [],
+      showModal: false
     }
   },
   created() {
@@ -34,6 +41,12 @@ export default {
           }
         }
       )
+  },
+
+  methods: {
+    addItem(data) {
+      this.todoList.push(data);
+    }
   }
 }
 </script>
