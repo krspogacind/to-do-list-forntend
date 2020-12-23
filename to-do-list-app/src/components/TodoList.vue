@@ -1,8 +1,9 @@
 <template>
-    <button class="btn btn-primary ml-5 mb-3" @click="showModal = true">Add to-do item</button>
-    <TodoListItemForm @add-item="addItem" v-if="showModal" @close="showModal = false"/>
+    <button class="btn btn-primary button-style" @click="showModal = true">Add to-do item</button>
+    <TodoListItemForm page_title="Add new to-do-item" button_text="Save" @add-item="addItem" v-if="showModal" @close="showModal = false"/>
     <div class="card-deck">
-        <TodoListItem 
+        <TodoListItem
+          @complete="complete" 
           v-for="todo in todoList"
           :key="todo.id"
           :todo="todo"/>
@@ -23,7 +24,7 @@ export default {
   data() {
     return {
       todoList: [],
-      showModal: false
+      showModal: false,
     }
   },
   created() {
@@ -46,7 +47,25 @@ export default {
   methods: {
     addItem(data) {
       this.todoList.push(data);
+    },
+
+    updateItem(data) {
+      console.log(data);
+      const index = this.todoList.findIndex(element => element.id === data.id);
+      this.todoList.splice(index, 1, data);
+    },
+
+    complete(id) {
+      const index = this.todoList.findIndex(element => element.id === id);
+      this.todoList[index].completed = true;
     }
   }
 }
 </script>
+
+<style scoped>
+.button-style {
+  margin-left: 65px;
+  margin-bottom: 20px;
+}
+</style>

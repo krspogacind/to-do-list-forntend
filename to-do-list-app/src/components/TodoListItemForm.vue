@@ -3,7 +3,7 @@
     <div class="modal-dialog">
       <div class="modal-content text-white bg-dark">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Add new to-do item</h5>
+          <h5 class="modal-title" id="exampleModalLabel">{{ page_title }}</h5>
           <button type="button" class="close text-white" @click="$emit('close')">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -37,7 +37,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default text-white" @click="$emit('close')">Close</button>
-          <button type="button" class="btn btn-primary" @click="handleSubmit">Save</button>
+          <button type="button" class="btn btn-primary" @click="handleSubmit">{{ button_text }}</button>
         </div>
       </div>
     </div>
@@ -57,6 +57,14 @@ export default {
       message: null
     }
   },
+  props: ['todo', 'page_title', 'button_text'],
+  created() {
+    if (this.todo !== undefined){
+      this.title = this.todo.title;
+      this.description = this.todo.description;
+      this.priority = this.todo.priority;
+    }
+  },
   methods: {
     handleSubmit() {
       if (this.title === '' || this.priority === ''){
@@ -69,21 +77,39 @@ export default {
         priority: this.priority
       }
       
-      axios.post('todo-items', data)
-        .then(
-          response => {
-            this.$emit('add-item', response.data);
-            this.$emit('close');
-          }
-        ).catch(
-          error => {
-            if (error.response.status === 401){
-              this.$router.push('/login');
-            } else {
-              alert('Server error, try again');
+      if (this.todo === undefined){
+        axios.post('todo-items', data)
+          .then(
+            response => {
+              this.$emit('add-item', response.data);
+              this.$emit('close');
             }
-          }
+          ).catch(
+            error => {
+              if (error.response.status === 401){
+                this.$router.push('/login');
+              } else {
+                alert('Server error, try again');
+              }
+            }
+          )
+      }else{
+        axios.put('todo-items/' + this.todo.id, data)
+          .then(
+            response => {
+              this.$emit('update-item', response.data);
+              this.$emit('close');
+            }
+          ).catch(
+            error => {
+              if (error.response.status === 401){
+                this.$router.push('/login');
+              } else {
+                alert('Server error, try again');
+              }
+            }
         )
+      }
     },
 
     deleteMessage() {
