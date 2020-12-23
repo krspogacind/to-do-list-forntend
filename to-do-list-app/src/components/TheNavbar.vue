@@ -1,6 +1,11 @@
 <template>
   <nav class="navbar navbar-expand navbar-dark bg-primary fixed-top">
     <router-link to="/" class="navbar-brand">To do list app</router-link>
+      <div class="navbar-nav mr-auto" v-if="user">
+        <div class="nav-item">
+          <router-link to="/todo-list" class="nav-link">To-do items</router-link>
+        </div>
+      </div>
       <ul class="navbar-nav ml-auto" v-if="!user">
         <li class="nav-item">
           <router-link to="/login" class="nav-link">Login</router-link>
@@ -9,11 +14,11 @@
           <router-link to="/registration" class="nav-link">Registration</router-link>
         </li>
       </ul>
-      <ul class="navbar-nav ml-auto" v-else>
-        <li class="nav-item">
+      <div class="navbar-nav ml-auto" v-else>
+        <div class="nav-item">
           <a href="javascript:void(0)" @click="handleLogOut"  class="nav-link">Logout</a>
-        </li>
-      </ul>
+        </div>
+      </div>
   </nav>
 </template>
 
