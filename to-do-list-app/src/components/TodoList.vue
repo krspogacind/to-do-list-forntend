@@ -3,6 +3,8 @@
     <TodoListItemForm page_title="Add new to-do-item" button_text="Save" @add-item="addItem" v-if="showModal" @close="showModal = false"/>
     <div class="card-deck">
         <TodoListItem
+          @delete-item="deleteItem"
+          @update-item="updateItem"
           @complete="complete" 
           v-for="todo in todoList"
           :key="todo.id"
@@ -50,9 +52,14 @@ export default {
     },
 
     updateItem(data) {
-      console.log(data);
       const index = this.todoList.findIndex(element => element.id === data.id);
       this.todoList.splice(index, 1, data);
+    },
+
+    deleteItem(data) {
+      console.log(data);
+      const index = this.todoList.findIndex(element => element.id === data.id);
+      this.todoList.splice(index, 1);
     },
 
     complete(id) {

@@ -78,8 +78,25 @@ export default {
     },
 
     updateItem(todo) {
-      this.$parent.updateItem(todo);
+      this.$emit('update-item', todo);
     },
+
+    deleteItem() {
+      axios.delete('todo-items/' + this.todo.id)
+          .then(
+            response => {
+              this.$emit('delete-item', response.data);
+            }
+          ).catch(
+            error => {
+              if (error.response.status === 401){
+                this.$router.push('/login');
+              } else {
+                alert('Server error, try again');
+              }
+            }
+          )
+    }
   }
 }
 </script>

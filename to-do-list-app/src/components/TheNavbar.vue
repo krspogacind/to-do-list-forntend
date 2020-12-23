@@ -3,7 +3,7 @@
     <router-link to="/" class="navbar-brand">To do list app</router-link>
       <div class="navbar-nav mr-auto" v-if="user">
         <div class="nav-item">
-          <router-link to="/todo-list" class="nav-link">To-do items</router-link>
+          <a href="/todo-list" class="nav-link">To-do items</router-link>
         </div>
       </div>
       <ul class="navbar-nav ml-auto" v-if="!user">
