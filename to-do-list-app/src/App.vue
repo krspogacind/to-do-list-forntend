@@ -20,7 +20,7 @@ export default {
     }
   },
   created() {
-    axios.post('me')
+    axios.post('auth/me')
       .then(
         response => {
           this.user = response.data;

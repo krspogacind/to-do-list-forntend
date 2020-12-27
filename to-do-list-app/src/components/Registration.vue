@@ -72,7 +72,7 @@ export default {
         password: this.password,
       }
       
-      axios.post('register', data)
+      axios.post('auth/register', data)
         .then(
           response => {
             this.$wkToast(response.data.message);

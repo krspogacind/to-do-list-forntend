@@ -43,11 +43,10 @@ export default {
         password: this.password,
       }
       
-      axios.post('login', data)
+      axios.post('auth/login', data)
         .then(
           response => {
             localStorage.setItem('token', response.data.access_token);
-            console.log(response.data.user);
             this.$store.dispatch('user', response.data.user);
             this.$router.push('/');
           }

@@ -1,6 +1,11 @@
 <template>
   <nav class="navbar navbar-expand navbar-dark bg-primary fixed-top">
     <router-link to="/" class="navbar-brand">To do list app</router-link>
+      <div class="navbar-nav mr-auto" v-if="user">
+        <div class="nav-item">
+          <a href="/todo-list" class="nav-link">To-do items</a>
+        </div>
+      </div>
       <ul class="navbar-nav ml-auto" v-if="!user">
         <li class="nav-item">
           <router-link to="/login" class="nav-link">Login</router-link>
@@ -9,16 +14,17 @@
           <router-link to="/registration" class="nav-link">Registration</router-link>
         </li>
       </ul>
-      <ul class="navbar-nav ml-auto" v-else>
-        <li class="nav-item">
+      <div class="navbar-nav ml-auto" v-else>
+        <div class="nav-item">
           <a href="javascript:void(0)" @click="handleLogOut"  class="nav-link">Logout</a>
-        </li>
-      </ul>
+        </div>
+      </div>
   </nav>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import axios from 'axios'
 
 export default {
   name: 'TheNavbar',
@@ -27,9 +33,19 @@ export default {
   },
   methods: {
     handleLogOut() {
-      localStorage.removeItem('token');
-      this.$store.dispatch('user', null);
-      this.$router.push('/');
+      axios.post('auth/logout')
+        .then(
+          response => {
+            console.log(response);
+            localStorage.removeItem('token');
+            this.$store.dispatch('user', null);
+            this.$router.push('/');
+          }
+        ).catch(
+          error => {
+            alert('Server error, try again');
+          }
+        )
     }
   }
 }
