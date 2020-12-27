@@ -3,7 +3,7 @@
     <router-link to="/" class="navbar-brand">To do list app</router-link>
       <div class="navbar-nav mr-auto" v-if="user">
         <div class="nav-item">
-          <a href="/todo-list" class="nav-link">To-do items</router-link>
+          <a href="/todo-list" class="nav-link">To-do items</a>
         </div>
       </div>
       <ul class="navbar-nav ml-auto" v-if="!user">
@@ -24,6 +24,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import axios from 'axios'
 
 export default {
   name: 'TheNavbar',
@@ -32,9 +33,19 @@ export default {
   },
   methods: {
     handleLogOut() {
-      localStorage.removeItem('token');
-      this.$store.dispatch('user', null);
-      this.$router.push('/');
+      axios.post('auth/logout')
+        .then(
+          response => {
+            console.log(response);
+            localStorage.removeItem('token');
+            this.$store.dispatch('user', null);
+            this.$router.push('/');
+          }
+        ).catch(
+          error => {
+            alert('Server error, try again');
+          }
+        )
     }
   }
 }
