@@ -9,13 +9,16 @@
     <!-- Email Address -->
     <div class="form-group col-lg-5 ml-auto mr-auto">
       <label for="email">Email</label>
-      <input id="email" type="email" class="form-control" v-model="email" placeholder="Email" required>
+      <input @input="deleteMessage" id="email" type="email" class="form-control" v-model="email" placeholder="Email" required>
+      <small>
+        {{ email_message }}
+      </small>
     </div>
 
     <!-- Password -->
     <div class="form-group col-lg-5 ml-auto mr-auto">
       <label for="password">Password</label>
-      <input id="password" type="password" class="form-control" v-model="password" placeholder="Password" required>
+      <input @input="deleteMessage" id="password" type="password" class="form-control" v-model="password" placeholder="Password" required>
       <small>
         {{ message }}
       </small>
@@ -24,8 +27,8 @@
     <!-- Confirm Password -->
     <div class="form-group col-lg-5 ml-auto mr-auto">
       <label for="confirm_password">Confirm password</label>
-      <input id="confirm_password" type="password" class="form-control" v-model="password_confirm" placeholder="Confirm password" required>
-      <small >
+      <input @input="deleteMessage" id="confirm_password" type="password" class="form-control" v-model="password_confirm" placeholder="Confirm password" required>
+      <small>
         {{ message }}
       </small>
     </div>
@@ -47,7 +50,8 @@ export default {
       email: '',
       password: '',
       password_confirm: '',
-      message: null
+      message: null,
+      email_message: null
     }
   },
   methods: {
@@ -71,15 +75,27 @@ export default {
       axios.post('register', data)
         .then(
           response => {
-            console.log(response)
+            this.$wkToast(response.data.message);
+            this.$router.push('/login');
           }
         ).catch(
           error => {
-            console.log(error)
+            if (error.response.status === 422){
+              this.email_message = "Email already in use";
+            } else {
+              alert('Server error, try again');
+            }
           }
         )
-      
-      this.$router.push('/');
+    },
+
+    deleteMessage() {
+      if (this.message !== null){
+        this.message = null;
+      }
+      if (this.email_message !== null){
+        this.email_message = null;
+      }
     }
   }
 }

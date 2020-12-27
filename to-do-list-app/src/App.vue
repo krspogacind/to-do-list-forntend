@@ -13,6 +13,20 @@ export default {
   name: 'App',
   components: {
     TheNavbar
+  },
+  data() {
+    return {
+      user: null
+    }
+  },
+  created() {
+    axios.post('me')
+      .then(
+        response => {
+          this.user = response.data;
+          this.$store.dispatch('user', response.data);
+        }
+      )
   }
 }
 </script>
